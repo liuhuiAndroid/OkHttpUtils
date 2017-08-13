@@ -3,7 +3,9 @@ package com.lh.okhttp;
 import android.net.Uri;
 
 import com.lh.okhttp.bean.RequestParam;
-import com.lh.okhttp.callback.BaseCallback;
+import com.lh.okhttp.builder.GetBuilder;
+import com.lh.okhttp.builder.PostFormBuilder;
+import com.lh.okhttp.builder.PostJsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,8 +30,16 @@ public class OkHttpUtils {
         this.mBuilder = builder;
     }
 
-    public void enqueue(BaseCallback callback) {
-        OkHttpManager.getInstance().request(this,callback);
+    public static GetBuilder get() {
+        return new GetBuilder();
+    }
+
+    public static PostFormBuilder post() {
+        return new PostFormBuilder();
+    }
+
+    public static PostJsonBuilder postJson() {
+        return new PostJsonBuilder();
     }
 
     public static Builder newBuilder() {
@@ -72,6 +82,7 @@ public class OkHttpUtils {
 
     /**
      * GET方法，url可能传参，需要拼接
+     *
      * @return
      */
     private String buildGetRequestParam() {

@@ -1,6 +1,7 @@
 package com.lh.okhttp;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -29,6 +31,7 @@ public class OkHttpManager {
         initOkHttp();
         mHandler = new Handler();
         mGson = new Gson();
+        Log.i("TAG","test init handler thread : "+Thread.currentThread().getName());
     }
 
     private void initOkHttp() {
@@ -52,11 +55,11 @@ public class OkHttpManager {
         return instance;
     }
 
-    public void request(OkHttpUtils okHttpUtils, final BaseCallback callback) {
+    public void request(Request request, final BaseCallback callback) {
         if (callback == null) {
             throw new NullPointerException("callback == null");
         }
-        mOkHttpClient.newCall(okHttpUtils.buildRequest()).enqueue(new Callback() {
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 sendOnFailureMessage(callback,call,e);

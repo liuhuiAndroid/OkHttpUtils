@@ -32,11 +32,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testGet(View view){
-        OkHttpUtils.newBuilder()
+        OkHttpUtils.get()
                 .url(BASE_URL.concat(NOW))
-                .get()
-                .addParam("city",CITY)
-                .addParam("key",API_KEY)
+                .addParams("city",CITY)
+                .addParams("key",API_KEY)
                 .build()
                 .enqueue(new BaseCallback<String>() {
                     @Override
@@ -47,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testPost(View view){
-        OkHttpUtils.newBuilder()
+        OkHttpUtils.post()
                 .url(BASE_URL.concat(HOURLY))
-                .post()
-                .addParam("city",CITY)
-                .addParam("key",API_KEY)
+                .addParams("city",CITY)
+                .addParams("key",API_KEY)
                 .build()
                 .enqueue(new BaseCallback<String>() {
                     @Override
