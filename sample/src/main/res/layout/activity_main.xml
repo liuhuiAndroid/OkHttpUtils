@@ -16,6 +16,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="testGetFile"
+        android:text="testGetFile"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="testPost"
         android:text="testPost"
         android:textAllCaps="false"/>

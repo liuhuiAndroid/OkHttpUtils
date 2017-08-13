@@ -23,10 +23,14 @@ public class PostJsonRequest extends OkHttpRequest {
     }
 
     @Override
-    protected Request buildRequest() throws JSONException {
+    protected Request buildRequest() {
         JSONObject jsonObject = new JSONObject();
         for (String key : mParams.keySet()) {
-            jsonObject.put(key, mParams.get(key).toString());
+            try {
+                jsonObject.put(key, mParams.get(key).toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         String json = jsonObject.toString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);

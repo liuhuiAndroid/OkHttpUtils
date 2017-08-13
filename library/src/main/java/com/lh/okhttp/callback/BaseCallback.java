@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by lh on 2017/8/12.
@@ -29,10 +30,13 @@ public abstract class BaseCallback<T> {
         mType = getSuperclassTypeParameter(this.getClass());
     }
 
-    public void onSuccess(T t){}
+    public abstract void onSuccess(T t);
 
-    public void onError(int code){}
+    public abstract void onError(int code);
 
     public void onFailure(Call call, IOException e){}
 
+    public void inProgress(float progress) {}
+
+    public abstract T  parseNetworkResponse(Response response) throws IOException;
 }

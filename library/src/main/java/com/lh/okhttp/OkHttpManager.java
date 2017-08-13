@@ -1,10 +1,9 @@
 package com.lh.okhttp;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.lh.okhttp.callback.BaseCallback;
 
 import java.io.IOException;
@@ -25,13 +24,18 @@ public class OkHttpManager {
     private volatile static OkHttpManager instance;
     private OkHttpClient mOkHttpClient;
     private Handler mHandler;
-    private Gson mGson;
 
     public OkHttpManager() {
         initOkHttp();
         mHandler = new Handler();
-        mGson = new Gson();
-        Log.i("TAG","test init handler thread : "+Thread.currentThread().getName());
+        Log.i("TAG", "test init handler thread : " + Thread.currentThread().getName());
+    }
+
+    public Handler getHandler() {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+        }
+        return mHandler;
     }
 
     private void initOkHttp() {
@@ -62,31 +66,25 @@ public class OkHttpManager {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                sendOnFailureMessage(callback,call,e);
+                sendOnFailureMessage(callback, call, e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful()){
-                    String result = response.body().string();
-                    if(callback.mType == null || callback.mType == String.class){
-                        sendOnSuccessMessage(callback,result);
-                    }else{
-                        //这里可能需要try..cache...
-                        try {
-                            sendOnSuccessMessage(callback,mGson.fromJson(result,callback.mType));
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                            throw new JsonSyntaxException("json parse error");
-                        }
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    String result = null;
+                    try {
+                        Object object = callback.parseNetworkResponse(response);
+                        sendOnSuccessMessage(callback,object);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
                     // response是流？用完需要关掉
-                    if(response.body()!=null){
+                    if (response.body() != null) {
                         response.body().close();
                     }
-                }else{
-                    sendOnErrorMessage(callback,response.code());
+                } else {
+                    sendOnErrorMessage(callback, response.code());
                 }
             }
         });
@@ -95,16 +93,16 @@ public class OkHttpManager {
     /**
      * 异步转同步???
      */
-    private void sendOnFailureMessage(final BaseCallback callback, final Call call, final IOException e){
+    private void sendOnFailureMessage(final BaseCallback callback, final Call call, final IOException e) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                callback.onFailure(call,e);
+                callback.onFailure(call, e);
             }
         });
     }
 
-    private void sendOnErrorMessage(final BaseCallback callback,final int code){
+    private void sendOnErrorMessage(final BaseCallback callback, final int code) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -113,7 +111,7 @@ public class OkHttpManager {
         });
     }
 
-    private void sendOnSuccessMessage(final BaseCallback callback,final Object object){
+    private void sendOnSuccessMessage(final BaseCallback callback, final Object object) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {

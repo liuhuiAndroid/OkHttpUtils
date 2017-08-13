@@ -3,8 +3,6 @@ package com.lh.okhttp.request;
 import com.lh.okhttp.OkHttpManager;
 import com.lh.okhttp.callback.BaseCallback;
 
-import org.json.JSONException;
-
 import java.util.Map;
 
 import okhttp3.Request;
@@ -33,7 +31,7 @@ public abstract class OkHttpRequest {
 
     protected Request.Builder builder = new Request.Builder();
 
-    protected abstract Request buildRequest() throws JSONException;
+    protected abstract Request buildRequest();
 
     public Request generateRequest() {
         Request request = buildRequest();
