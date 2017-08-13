@@ -20,7 +20,7 @@ public class PostJsonBuilder extends OkHttpRequestBuilder<PostJsonBuilder> {
     }
 
     public OkHttpRequest build() {
-        return new PostJsonRequest(url, params);
+        return new PostJsonRequest(url, params,headers);
     }
 
 

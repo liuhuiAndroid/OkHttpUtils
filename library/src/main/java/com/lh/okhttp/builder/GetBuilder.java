@@ -42,7 +42,7 @@ public class GetBuilder extends OkHttpRequestBuilder<GetBuilder> {
         if (params != null) {
             url = appendParams(url, params);
         }
-        GetRequest getRequest = new GetRequest(url,params);
+        GetRequest getRequest = new GetRequest(url,params,headers);
         getRequest.setRequest(getRequest.buildRequest());
         return getRequest;
     }

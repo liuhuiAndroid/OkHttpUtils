@@ -17,8 +17,8 @@ public class PostJsonRequest extends OkHttpRequest {
 
     private Map<String, Object> mParams;
 
-    public PostJsonRequest(String url, Map<String, Object> params) {
-        super(url, params);
+    public PostJsonRequest(String url, Map<String, Object> params, Map<String, String> headers) {
+        super(url, params, headers);
         mParams = params;
     }
 

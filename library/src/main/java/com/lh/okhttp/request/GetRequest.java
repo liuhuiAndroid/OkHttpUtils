@@ -11,8 +11,8 @@ import okhttp3.Request;
 public class GetRequest extends OkHttpRequest{
 
 
-    public GetRequest(String url, Map<String, Object> params) {
-        super(url, params);
+    public GetRequest(String url, Map<String, Object> params, Map<String, String> headers) {
+        super(url, params, headers);
     }
 
     @Override

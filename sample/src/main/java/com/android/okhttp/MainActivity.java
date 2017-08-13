@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public void testGet(View view) {
         OkHttpUtils.get()
                 .url(BASE_URL.concat(NOW))
+                .addHeader("app_type","android")
                 .addParams("city", CITY)
                 .addParams("key", API_KEY)
                 .build()

@@ -14,6 +14,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by lh on 2017/8/12.
@@ -39,9 +40,16 @@ public class OkHttpManager {
     }
 
     private void initOkHttp() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override public void log(String message) {
+                Log.i("OkHttp",message);
+            }
+        });
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         mOkHttpClient = new OkHttpClient().newBuilder()
                 .readTimeout(30 * 1000, TimeUnit.SECONDS)
                 .connectTimeout(30 * 1000, TimeUnit.SECONDS)
+                .addNetworkInterceptor(logging)
                 .build();
     }
 
